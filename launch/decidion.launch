@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<launch>
+    <include file="$(find swarm_play)/launch/multimaster.launch" />
+
+    <group ns = "decision">
+        <node pkg = "swarm_play" name="decidion_making" type = "move_dron.py" respawn="true" output="screen" >
+        </node>
+    </group>
+</launch>
