@@ -1,0 +1,4 @@
+#!/bin/bash
+
+source /home/stepan/workspaces/swarmplay_decision_ws/devel/setup.bash
+roslaunch SwarmPlayTicTakToe pure_decision.launch

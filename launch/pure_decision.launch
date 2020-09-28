@@ -1,7 +1,5 @@
 <?xml version="1.0"?>
 <launch>
-    <include file="$(find SwarmPlayTicTakToe)/launch/multimaster.launch" />
-
     <group ns = "decision">
         <node pkg = "SwarmPlayTicTakToe" name="decidion_making" type = "move_dron.py" respawn="true" output="screen" >
         </node>

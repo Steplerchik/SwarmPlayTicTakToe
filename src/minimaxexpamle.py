@@ -1,15 +1,18 @@
-#!/usr/bin/env python
-# license removed for brevity
-import rospy
-from std_msgs.msg import String
-
 #!/usr/bin/env python3
-#from math import inf as infinity
+from math import inf as infinity
 from random import choice
 import platform
 import time
 from os import system
 
+"""
+An implementation of Minimax AI Algorithm in Tic Tac Toe,
+using Python.
+This software is available under GPL license.
+Author: Clederson Cruz
+Year: 2017
+License: GNU GENERAL PUBLIC LICENSE (GPL)
+"""
 
 HUMAN = -1
 COMP = +1
@@ -83,7 +86,7 @@ def empty_cells(state):
         for y, cell in enumerate(row):
             if cell == 0:
                 cells.append([x, y])
-    print(cells)
+
     return cells
 
 
@@ -124,9 +127,9 @@ def minimax(state, depth, player):
     :return: a list with [the best row, best col, best score]
     """
     if player == COMP:
-        best = [-1, -1, -10000]
+        best = [-1, -1, -infinity]
     else:
-        best = [-1, -1, 10000]
+        best = [-1, -1, +infinity]
 
     if depth == 0 or game_over(state):
         score = evaluate(state)
@@ -165,16 +168,20 @@ def render(state, c_choice, h_choice):
     Print the board on console
     :param state: current state of the board
     """
+
     chars = {
         -1: h_choice,
         +1: c_choice,
         0: ' '
     }
     str_line = '---------------'
+
     print('\n' + str_line)
     for row in state:
-        print(chars[row[0]],chars[row[1]],chars[row[2]])
-
+        for cell in row:
+            symbol = chars[cell]
+            print(f'| {symbol} |', end='')
+        print('\n' + str_line)
 
 
 def ai_turn(c_choice, h_choice):
@@ -190,7 +197,7 @@ def ai_turn(c_choice, h_choice):
         return
 
     clean()
-    print('Computer turn' , c_choice)
+    print(f'Computer turn [{c_choice}]')
     render(board, c_choice, h_choice)
 
     if depth == 9:
@@ -224,7 +231,7 @@ def human_turn(c_choice, h_choice):
     }
 
     clean()
-    print('Human turn',h_choice)
+    print(f'Human turn [{h_choice}]')
     render(board, c_choice, h_choice)
 
     while move < 1 or move > 9:
@@ -248,15 +255,32 @@ def main():
     Main function that calls all functions
     """
     clean()
-    h_choice = 'O'  # X or O
-    c_choice = 'X'  # X or O
+    h_choice = ''  # X or O
+    c_choice = ''  # X or O
     first = ''  # if human is the first
+
+    # Human chooses X or O to play
+    while h_choice != 'O' and h_choice != 'X':
+        try:
+            print('')
+            h_choice = input('Choose X or O\nChosen: ').upper()
+        except (EOFError, KeyboardInterrupt):
+            print('Bye')
+            exit()
+        except (KeyError, ValueError):
+            print('Bad choice')
+
+    # Setting computer's choice
+    if h_choice == 'X':
+        c_choice = 'O'
+    else:
+        c_choice = 'X'
 
     # Human may starts first
     clean()
     while first != 'Y' and first != 'N':
         try:
-            first = input('First to start?[y/n]: ').upper()
+            first = input('First to start_decision?[y/n]: ').upper()
         except (EOFError, KeyboardInterrupt):
             print('Bye')
             exit()
@@ -275,12 +299,12 @@ def main():
     # Game over message
     if wins(board, HUMAN):
         clean()
-        print('Human turn', h_choice)
+        print(f'Human turn [{h_choice}]')
         render(board, c_choice, h_choice)
         print('YOU WIN!')
     elif wins(board, COMP):
         clean()
-        print('Computer turn', c_choice)
+        print(f'Computer turn [{c_choice}]')
         render(board, c_choice, h_choice)
         print('YOU LOSE!')
     else:
